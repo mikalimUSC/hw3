@@ -68,28 +68,30 @@ void dealloc(Node* head)
 // -----------------------------------------------
 
 
+struct GreaterThanTen {
+    bool operator()(int value) const {
+        return value > 10;
+    }
+};
 
 
-
-int main(int argc, char* argv[])
-{
-    if(argc < 2) {
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
         cout << "Please provide an input file" << endl;
         return 1;
     }
 
-    // -----------------------------------------------
-    // Feel free to update any code below this point
-    // -----------------------------------------------
     Node* head = readList(argv[1]);
     cout << "Original list: ";
     print(head);
 
-    // Test out your linked list code
 
 
+    Node* filteredHead = llfilter(head, GreaterThanTen());
+    cout << "Filtered list (values <= 10): ";
+    print(filteredHead);
 
-    
+    dealloc(filteredHead);
+
     return 0;
-
 }

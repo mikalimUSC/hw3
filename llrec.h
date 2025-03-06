@@ -3,7 +3,9 @@
 #ifndef NULL
 #define NULL 0
 #endif
+#include <iostream>
 
+using namespace std;
 /**
  * Node struct for both problems
  */
@@ -69,22 +71,30 @@ void llpivot(Node *&head, Node *&smaller, Node *&larger, int pivot);
  *   may change [i.e. be filtered])
  *
  */
-template <typename Comp>
-Node* llfilter(Node* head, Comp pred);
 
 //*****************************************************************************
 // Since template implementations should be in a header file, we will
 // implement the above function now.
 //*****************************************************************************
-
 template <typename Comp>
 Node* llfilter(Node* head, Comp pred)
 {
-    //*********************************************
-    // Provide your implementation below
-    //*********************************************
+    if (head == nullptr) {
+        return nullptr;
+    }
+    Node* next = head->next;
+    if (pred(head->val)) {
+     //   cout << "Filtering out  " << head->val<<endl;
+        delete head;
+        return llfilter(next,pred);
+    } else {
+      //  cout << "calling filter on  " << next->val<<endl;
+        head->next = llfilter(next, pred);  
+     //   cout << "returning head of " << head->val<<endl;
+        return head;
+    }
 
-
+ 
 }
 
 #endif

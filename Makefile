@@ -2,14 +2,21 @@ CXX := g++
 CXXFLAGS := -g -Wall --std=c++11
 VALGRIND := valgrind --tool=memcheck --leak-check=yes
 
-all: llrec-test
+# Define object files
+OBJS = heap_test.o
 
-#-----------------------------------------------------
-# ADD target(s) to build your llrec-test executable
-#-----------------------------------------------------
+# Target executable
+TARGET = heap_test
 
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ -lstdc++
+
+heap_test.o: heap_test.cpp heap.h
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f *.o rh llrec-test *~
+	rm -f $(OBJS) $(TARGET)
 
-.PHONY: clean 
+.PHONY: all clean

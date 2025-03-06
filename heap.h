@@ -2,7 +2,7 @@
 #define HEAP_H
 #include <functional>
 #include <stdexcept>
-
+#include <vector>
 template <typename T, typename PComparator = std::less<T> >
 class Heap
 {
@@ -61,54 +61,93 @@ public:
 
 private:
   /// Add whatever helper functions and data members you need below
+    std::vector<T> heap;
+    int m;
+    PComparator comparator;
 
-
-
+   void heapifyUp(size_t index);
+    void heapifyDown(size_t index);
 
 };
 
 // Add implementation of member functions here
-
-
-// We will start top() for you to handle the case of 
-// calling top on an empty heap
 template <typename T, typename PComparator>
-T const & Heap<T,PComparator>::top() const
-{
-  // Here we use exceptions to handle the case of trying
-  // to access the top element of an empty heap
-  if(empty()){
-    // ================================
-    // throw the appropriate exception
-    // ================================
-
-
-  }
-  // If we get here we know the heap has at least 1 item
-  // Add code to return the top element
-
-
+Heap<T, PComparator>::Heap(int m, PComparator c ){
 
 }
 
-
-// We will start pop() for you to handle the case of 
-// calling top on an empty heap
 template <typename T, typename PComparator>
-void Heap<T,PComparator>::pop()
-{
-  if(empty()){
-    // ================================
-    // throw the appropriate exception
-    // ================================
+Heap<T, PComparator>:: ~Heap() {}
 
-
+template <typename T, typename PComparator>
+  bool Heap<T, PComparator>::empty() const{
+    return heap.size() ==0;
   }
 
-
-
+template <typename T, typename PComparator >
+void Heap<T, PComparator>::push(const T& item) {
+    heap.push_back(item);
+    heapifyUp(heap.size() - 1);
 }
 
+template <typename T, typename PComparator>
+T const &Heap<T, PComparator>::top() const {
+    if (empty()) {
+        throw std::underflow_error("Error");
+    }
+    return heap.front();
+}
+
+template <typename T, typename PComparator>
+void Heap<T, PComparator>::pop() {
+    if (empty()) {
+        throw std::underflow_error("Error");
+    }
+    T temp = heap.front();
+    heap.front() = heap.back();
+    heap.back() = temp;
+    heap.pop_back();
+    heapifyDown(0);
+}
+
+
+template <typename T, typename PComparator>
+void Heap<T, PComparator>::heapifyUp(size_t index) {
+    while (index > 0) {
+        int parentIndex = (index - 1) / m;
+        if (!comparator(heap[parentIndex], heap[index])) {
+            T temp = heap[index];
+            heap[index] = heap[parentIndex];
+            heap[parentIndex] = temp;
+            index = parentIndex;
+        } else {
+            break;
+        }
+    }
+}
+
+template <typename T, typename PComparator>
+void Heap<T, PComparator>::heapifyDown(size_t index) {
+    while (index * m + 1 < heap.size()) { //Any children?
+        int largestChild = index * m + 1;
+        
+        for (int i = 1; i < m && largestChild + i < heap.size(); ++i) {
+            if (!comparator(heap[largestChild], heap[largestChild + i])) {
+                largestChild += i;
+            }
+        }
+
+        if (!comparator(heap[index], heap[largestChild])) {
+             T temp = heap[index];
+            heap[index] = heap[largestChild];
+            heap[largestChild] = temp;
+
+            index = largestChild;
+        } else {
+            break;
+        }
+    }
+}
 
 
 #endif
