@@ -3,6 +3,7 @@
 #include <functional>
 #include <stdexcept>
 #include <vector>
+#include <iostream>
 template <typename T, typename PComparator = std::less<T> >
 class Heap
 {
@@ -59,6 +60,9 @@ public:
    */
   size_t size() const;
 
+
+  T& operator[](size_t index);
+
 private:
   /// Add whatever helper functions and data members you need below
     std::vector<T> heap;
@@ -66,7 +70,7 @@ private:
     PComparator comparator;
 
    void heapifyUp(size_t index);
-    void heapifyDown(size_t index);
+   void heapifyDown(size_t index);
 
 };
 
@@ -77,7 +81,10 @@ Heap<T, PComparator>::Heap(int m, PComparator c ){
 }
 
 template <typename T, typename PComparator>
-Heap<T, PComparator>:: ~Heap() {}
+Heap<T, PComparator>:: ~Heap() {
+  
+
+}
 
 template <typename T, typename PComparator>
   bool Heap<T, PComparator>::empty() const{
@@ -108,6 +115,7 @@ void Heap<T, PComparator>::pop() {
     heap.back() = temp;
     heap.pop_back();
     heapifyDown(0);
+  
 }
 
 
@@ -116,9 +124,10 @@ void Heap<T, PComparator>::heapifyUp(size_t index) {
     while (index > 0) {
         int parentIndex = (index - 1) / m;
         if (!comparator(heap[parentIndex], heap[index])) {
-            T temp = heap[index];
-            heap[index] = heap[parentIndex];
-            heap[parentIndex] = temp;
+           // std::cout << "Swapping elements at indices " << parentIndex << " and " << index << std::endl;
+            T temp = heap[parentIndex];
+            heap[parentIndex] = heap[index];
+            heap[index] = temp;
             index = parentIndex;
         } else {
             break;
@@ -128,20 +137,19 @@ void Heap<T, PComparator>::heapifyUp(size_t index) {
 
 template <typename T, typename PComparator>
 void Heap<T, PComparator>::heapifyDown(size_t index) {
-    while (index * m + 1 < heap.size()) { //Any children?
-        int largestChild = index * m + 1;
-        
-        for (int i = 1; i < m && largestChild + i < heap.size(); ++i) {
-            if (!comparator(heap[largestChild], heap[largestChild + i])) {
-                largestChild += i;
+    while (true) {
+        int largestChild = index;
+        for (size_t i = 1; i <= m && index * m + i < heap.size(); ++i) {
+            if (comparator(heap[index * m + i], heap[largestChild])) {
+                largestChild = index * m + i;
             }
         }
 
-        if (!comparator(heap[index], heap[largestChild])) {
-             T temp = heap[index];
-            heap[index] = heap[largestChild];
-            heap[largestChild] = temp;
-
+        if (largestChild != index) {
+           // std::cout << "Swapping elements at indices " << index << " and " << largest << std::endl;
+            T temp = heap[index];
+             heap[index] = heap[largestChild];
+             heap[largestChild] = temp;
             index = largestChild;
         } else {
             break;
@@ -150,5 +158,12 @@ void Heap<T, PComparator>::heapifyDown(size_t index) {
 }
 
 
+template <typename T, typename PComparator>
+T& Heap<T, PComparator>::operator[](size_t index) {
+  if (index >= heap.size()) {
+    throw std::out_of_range("Index out of range");
+  }
+  return heap[index];
+}
 #endif
 
