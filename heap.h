@@ -74,6 +74,10 @@ private:
 
 };
 
+template <typename T, typename PComparator>
+  size_t Heap<T, PComparator>::size() const{
+    return heap.size();
+  }
 // Add implementation of member functions here
 template <typename T, typename PComparator>
 Heap<T, PComparator>::Heap(int m, PComparator c ){
