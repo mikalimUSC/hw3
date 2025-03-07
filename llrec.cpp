@@ -40,8 +40,21 @@ using namespace std;
 
 Node* getNext(Node* n);
 void printList(Node *head, const std::string &label = "");
-void llpivot(Node *&head, Node *&smaller, Node *&larger, int pivot) {
+void llpivothelper(Node *&head, Node *&smaller, Node *&larger, int pivot);
+void llpivot(Node *&head, Node *&smaller, Node *&larger, int pivot){
+    smaller = nullptr;
+    larger = nullptr;
+    if(head==nullptr){
+        return;
+    }
+    llpivothelper(head, smaller,larger, pivot);
+
+}
+
+
+void llpivothelper(Node *&head, Node *&smaller, Node *&larger, int pivot) {
     if (head == nullptr) {
+        cout << " head is nullptr. Return" << endl;
         return;
     }
 
@@ -66,7 +79,7 @@ void llpivot(Node *&head, Node *&smaller, Node *&larger, int pivot) {
         }
     }
 
-    llpivot(head, smaller, larger, pivot);
+    llpivothelper(head, smaller, larger, pivot);
 }
 
 
