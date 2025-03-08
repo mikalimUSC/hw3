@@ -84,10 +84,12 @@ void llpivothelper(Node *&head, Node *&smaller, Node *&larger, int pivot) {
 
 // Given list N, getNext iterates through the list and returns a pointer to the last item
 Node* getNext(Node* n) {
-    Node* last = n;
-    while (last->next != nullptr) {
-        last = last->next;
+    if (n == nullptr) {
+        return nullptr;
     }
-    return last;
+    if (n->next != nullptr) {
+        return getNext(n->next);
+    } else {
+        return n;
+    }
 }
-
