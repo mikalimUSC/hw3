@@ -1,5 +1,4 @@
 #include "llrec.h"
-#include <iostream>
 
 using namespace std;
 //*********************************************
@@ -39,7 +38,7 @@ using namespace std;
  */
 
 Node* getNext(Node* n);
-void printList(Node *head, const std::string &label = "");
+
 void llpivothelper(Node *&head, Node *&smaller, Node *&larger, int pivot);
 void llpivot(Node *&head, Node *&smaller, Node *&larger, int pivot){
     smaller = nullptr;
@@ -54,7 +53,7 @@ void llpivot(Node *&head, Node *&smaller, Node *&larger, int pivot){
 
 void llpivothelper(Node *&head, Node *&smaller, Node *&larger, int pivot) {
     if (head == nullptr) {
-        cout << " head is nullptr. Return" << endl;
+ 
         return;
     }
 
